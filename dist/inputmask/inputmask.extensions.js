@@ -1,14 +1,14 @@
 /*!
-* jquery.inputmask.extensions.js
+* inputmask.extensions.js
 * http://github.com/RobinHerbots/jquery.inputmask
 * Copyright (c) 2010 - 2015 Robin Herbots
 * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
-* Version: 3.1.54
+* Version: 3.1.64-91
 */
 !function(factory) {
-    "function" == typeof define && define.amd ? define([ "jquery", "./jquery.inputmask" ], factory) : factory(jQuery);
+    "function" == typeof define && define.amd ? define([ "jquery", "./inputmask" ], factory) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./inputmask")) : factory(jQuery);
 }(function($) {
-    return $.extend($.inputmask.defaults.definitions, {
+    return inputmask.extendDefinitions({
         A: {
             validator: "[A-Za-z\u0410-\u044f\u0401\u0451\xc0-\xff\xb5]",
             cardinality: 1,
@@ -19,7 +19,7 @@
             cardinality: 1,
             casing: "upper"
         }
-    }), $.extend($.inputmask.defaults.aliases, {
+    }), inputmask.extendAliases({
         url: {
             mask: "ir",
             placeholder: "",
@@ -37,7 +37,7 @@
             },
             definitions: {
                 i: {
-                    validator: function() {
+                    validator: function(chrs, maskset, pos, strict, opts) {
                         return !0;
                     },
                     cardinality: 8,
@@ -80,7 +80,7 @@
             mask: "i[i[i]].i[i[i]].i[i[i]].i[i[i]]",
             definitions: {
                 i: {
-                    validator: function(chrs, maskset, pos) {
+                    validator: function(chrs, maskset, pos, strict, opts) {
                         return pos - 1 > -1 && "." != maskset.buffer[pos - 1] ? (chrs = maskset.buffer[pos - 1] + chrs, 
                         chrs = pos - 2 > -1 && "." != maskset.buffer[pos - 2] ? maskset.buffer[pos - 2] + chrs : "0" + chrs) : chrs = "00" + chrs, 
                         new RegExp("25[0-5]|2[0-4][0-9]|[01][0-9][0-9]").test(chrs);
@@ -92,7 +92,7 @@
         email: {
             mask: "*{1,64}[.*{1,64}][.*{1,64}][.*{1,64}]@*{1,64}[.*{2,64}][.*{2,6}][.*{1,2}]",
             greedy: !1,
-            onBeforePaste: function(pastedValue) {
+            onBeforePaste: function(pastedValue, opts) {
                 return pastedValue = pastedValue.toLowerCase(), pastedValue.replace("mailto:", "");
             },
             definitions: {
@@ -103,5 +103,5 @@
                 }
             }
         }
-    }), $.fn.inputmask;
+    }), inputmask;
 });
